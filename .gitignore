@@ -1,0 +1,21 @@
+# Compiled python files
+__pycache__/
+*.pyc
+
+# Distribution / PyInstaller build files
+build/
+dist/
+*.exe
+
+# User config / Local state files
+ffx_text_tool_recent_files.json
+
+# Local backups
+*.bak
+
+# IDE configs
+.idea/
+.vscode/
+*.suo
+*.user
+*.workspace
