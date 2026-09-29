@@ -13,6 +13,15 @@ COLOR_MAP = {
 }
 COLOR_REV = {v: k for k, v in COLOR_MAP.items()}
 
+FILE_RECORD_SIZES = {
+    "item_txt.bin": 16, "arms_txt.bin": 16, "status_txt.bin": 16, "summon_txt.bin": 16,
+    "config_txt.bin": 16, "menu_txt.bin": 16, "mmain_txt.bin": 16, "name_txt.bin": 16,
+    "save_txt.bin": 16, "btlend_txt.bin": 16, "btl_txt.bin": 16, "build_txt.bin": 16,
+    "help_txt.bin": 16, "item.bin": 92, "command.bin": 92, "monmagic1.bin": 92,
+    "monmagic2.bin": 92, "important.bin": 20, "panel.bin": 16, "a_ability.bin": 16,
+    "monster1.bin": 128, "monster2.bin": 128, "monster3.bin": 128,
+}
+
 class FFXCodec:
     def __init__(self, ffx_master_path=None):
         self.ffx_master_path = ffx_master_path

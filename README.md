@@ -1,6 +1,6 @@
 # Final Fantasy X Text & Dialogue Editor (FFX Text Tool)
 
-A modern desktop GUI utility designed to view, decode, edit, and repack text and dialogue binary tables (e.g., `item_txt.bin`, `arms_txt.bin`, `status_txt.bin`, `summon_txt.bin`, `menu_txt.bin`, `mmain_txt.bin`, etc.) from *Final Fantasy X*.
+A modern desktop GUI utility designed to view, decode, edit, and repack text and dialogue binary tables (e.g., `item_txt.bin`, `arms_txt.bin`, `status_txt.bin`, `summon_txt.bin`, `menu_txt.bin`, `mmain_txt.bin`, `monster1.bin`, `monster2.bin`, `monster3.bin`, etc.) from *Final Fantasy X*.
 
 [![Repository](https://img.shields.io/badge/GitHub-FFX__Text__Tool-blue?logo=github)](https://github.com/odinj2010/FFX_Text_Tool)
 

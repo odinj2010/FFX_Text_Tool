@@ -21,6 +21,7 @@ except ImportError:
         "save_txt.bin": 16, "btlend_txt.bin": 16, "btl_txt.bin": 16, "build_txt.bin": 16,
         "help_txt.bin": 16, "item.bin": 92, "command.bin": 92, "monmagic1.bin": 92,
         "monmagic2.bin": 92, "important.bin": 20, "panel.bin": 16, "a_ability.bin": 16,
+        "monster1.bin": 128, "monster2.bin": 128, "monster3.bin": 128,
     }
 
 CONFIG_FILE = os.path.join(script_dir, "ffx_text_tool_recent_files.json")
@@ -849,11 +850,15 @@ class FFXTextToolGUI:
             
         for r in self.records:
             name = r['name']
+            sname = r['sname']
             desc = r['desc']
-            if not query or query in str(r['id']) or query in name.lower() or query in desc.lower():
+            sdesc = r['sdesc']
+            # For files like monster1-3.bin, desc is usually '-' while sname/sdesc contain the Sensor/Scan text
+            display_desc = desc if desc and desc != "-" else (sname if sname else sdesc)
+            if not query or query in str(r['id']) or query in name.lower() or query in desc.lower() or query in sname.lower() or query in sdesc.lower():
                 # Format displaying bracket commands or multi-lines cleanly
                 name_clean = name.replace("\n", " ")
-                desc_clean = desc.replace("\n", " ")
+                desc_clean = display_desc.replace("\n", " ")
                 self.tree.insert("", tk.END, iid=r['id'], values=(r['id'], name_clean, desc_clean))
 
     def on_tree_row_selected(self, event=None):
