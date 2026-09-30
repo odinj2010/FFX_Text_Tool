@@ -5,6 +5,11 @@ import json
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import struct
+import webbrowser
+
+APP_VERSION = "v1.1.0"
+AUTHOR = "NfgOdin"
+WEBSITE_URL = "https://nfgodin.github.io/"
 
 # Add current folder to sys.path to load ffx_codec
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -68,8 +73,8 @@ class FFXTextToolGUI:
         
         if not is_embedded:
             self.root.title("FFX Text & Dialogue Editor")
-            self.root.geometry("1100x680")
-            self.root.minsize(900, 580)
+            self.root.geometry("1100x720")
+            self.root.minsize(900, 620)
             self.root.configure(bg=self.bg_color)
             
             # Apply TTK styles
@@ -241,25 +246,31 @@ class FFXTextToolGUI:
         self.top_panel.pack(fill="x", side="top", pady=(0, 10))
         self.build_top_panel(self.top_panel)
         
-        # Middle Body split into Left Panel (Selection & Settings) and Right Panel (Treeview & Editors)
-        self.body_paned = ttk.PanedWindow(self.main_container, orient="horizontal")
-        self.body_paned.pack(fill="both", expand=True, side="top")
-        
-        self.left_panel = ttk.Frame(self.body_paned, width=320, padding=(0, 0, 10, 0))
-        self.body_paned.add(self.left_panel, weight=1)
-        self.build_left_panel(self.left_panel)
-        
-        self.right_panel = ttk.Frame(self.body_paned, padding=(10, 0, 0, 0))
-        self.body_paned.add(self.right_panel, weight=4)
-        self.build_right_panel(self.right_panel)
-        
-        # Bottom Console (visible only if standalone)
+        # Bottom Elements (packed first to guarantee footer & console are always pinned at the bottom and never clipped)
         if not self.is_embedded:
+            # Footer underneath Process Logs (pinned at very bottom)
+            self.footer_frame = ttk.Frame(self.main_container)
+            self.footer_frame.pack(fill="x", side="bottom", pady=(4, 0))
+            
+            self.lbl_about = tk.Label(
+                self.footer_frame,
+                text="About FFX Text Tool",
+                fg=self.accent_color,
+                bg=self.bg_color,
+                font=("Segoe UI", 9, "underline"),
+                cursor="hand2"
+            )
+            self.lbl_about.pack(side="right", padx=5)
+            self.lbl_about.bind("<Button-1>", lambda e: self.show_about_dialog())
+            self.lbl_about.bind("<Enter>", lambda e: self.lbl_about.config(fg=self.accent_hover))
+            self.lbl_about.bind("<Leave>", lambda e: self.lbl_about.config(fg=self.accent_color))
+
+            # Process Logs Console (pinned above footer, at the bottom)
             self.console_panel = ttk.LabelFrame(self.main_container, text=" Process Logs ", padding=5)
             self.console_panel.pack(fill="x", side="bottom", pady=(10, 0))
             
             self.txt_log = tk.Text(self.console_panel, bg="#0d0d0d", fg="#e5e7eb", font=("Consolas", 9), 
-                                   height=6, wrap="word", relief="flat", highlightthickness=1, highlightbackground=self.border_color)
+                                   height=5, wrap="word", relief="flat", highlightthickness=1, highlightbackground=self.border_color)
             self.txt_log.pack(fill="both", expand=True, side="left")
             
             # Tags
@@ -271,6 +282,18 @@ class FFXTextToolGUI:
             log_scroll = ttk.Scrollbar(self.console_panel, command=self.txt_log.yview)
             log_scroll.pack(fill="y", side="right")
             self.txt_log.config(yscrollcommand=log_scroll.set)
+
+        # Middle Body split into Left Panel (Selection & Settings) and Right Panel (Treeview & Editors)
+        self.body_paned = ttk.PanedWindow(self.main_container, orient="horizontal")
+        self.body_paned.pack(fill="both", expand=True)
+        
+        self.left_panel = ttk.Frame(self.body_paned, width=320, padding=(0, 0, 10, 0))
+        self.body_paned.add(self.left_panel, weight=1)
+        self.build_left_panel(self.left_panel)
+        
+        self.right_panel = ttk.Frame(self.body_paned, padding=(10, 0, 0, 0))
+        self.body_paned.add(self.right_panel, weight=4)
+        self.build_right_panel(self.right_panel)
 
     def build_top_panel(self, frame):
         lbl = ttk.Label(frame, text="Master Folder:")
@@ -1413,6 +1436,93 @@ class FFXTextToolGUI:
         else:
             btn.bind("<Enter>", lambda e: btn.config(bg=self.border_color))
             btn.bind("<Leave>", lambda e: btn.config(bg=self.card_color))
+
+    def show_about_dialog(self):
+        dialog = tk.Toplevel(self.root)
+        dialog.title("About FFX Text Tool")
+        dialog.geometry("450x300")
+        dialog.resizable(False, False)
+        dialog.configure(bg=self.bg_color)
+        dialog.transient(self.root)
+        dialog.grab_set()
+
+        # Center dialog relative to main window
+        dialog.update_idletasks()
+        rx = self.root.winfo_x()
+        ry = self.root.winfo_y()
+        rw = self.root.winfo_width()
+        rh = self.root.winfo_height()
+        dx = rx + max(0, (rw - 450) // 2)
+        dy = ry + max(0, (rh - 300) // 2)
+        dialog.geometry(f"+{dx}+{dy}")
+
+        card = ttk.Frame(dialog, padding=20)
+        card.pack(fill="both", expand=True, padx=15, pady=15)
+
+        lbl_title = tk.Label(
+            card,
+            text="FFX Text & Dialogue Editor",
+            font=("Segoe UI", 14, "bold"),
+            fg=self.accent_color,
+            bg=self.bg_color
+        )
+        lbl_title.pack(pady=(0, 6))
+
+        lbl_ver = tk.Label(
+            card,
+            text=f"Version: {APP_VERSION}",
+            font=("Segoe UI", 10, "bold"),
+            fg=self.text_color,
+            bg=self.bg_color
+        )
+        lbl_ver.pack(pady=(0, 4))
+
+        lbl_author = tk.Label(
+            card,
+            text=f"Tool Creator: {AUTHOR}",
+            font=("Segoe UI", 10),
+            fg=self.text_dim,
+            bg=self.bg_color
+        )
+        lbl_author.pack(pady=(0, 12))
+
+        lbl_web_desc = tk.Label(
+            card,
+            text="Visit Website:",
+            font=("Segoe UI", 9),
+            fg=self.text_dim,
+            bg=self.bg_color
+        )
+        lbl_web_desc.pack(pady=(0, 2))
+
+        lbl_link = tk.Label(
+            card,
+            text=WEBSITE_URL,
+            font=("Segoe UI", 10, "underline"),
+            fg=self.accent_color,
+            bg=self.bg_color,
+            cursor="hand2"
+        )
+        lbl_link.pack(pady=(0, 20))
+        lbl_link.bind("<Button-1>", lambda e: webbrowser.open_new(WEBSITE_URL))
+        lbl_link.bind("<Enter>", lambda e: lbl_link.config(fg=self.accent_hover))
+        lbl_link.bind("<Leave>", lambda e: lbl_link.config(fg=self.accent_color))
+
+        btn_close = tk.Button(
+            card,
+            text="Close",
+            command=dialog.destroy,
+            bg=self.card_color,
+            fg=self.text_color,
+            font=("Segoe UI", 9, "bold"),
+            relief="flat",
+            activebackground=self.border_color,
+            activeforeground=self.text_color,
+            padx=20,
+            pady=4
+        )
+        btn_close.pack(side="bottom")
+        self.bind_hover(btn_close)
 
 def main():
     root = tk.Tk()

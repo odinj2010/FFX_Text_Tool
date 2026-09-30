@@ -2,7 +2,7 @@
 
 A modern desktop GUI utility designed to view, decode, edit, and repack text and dialogue binary tables (e.g., `item_txt.bin`, `arms_txt.bin`, `status_txt.bin`, `summon_txt.bin`, `menu_txt.bin`, `mmain_txt.bin`, `monster1.bin`, `monster2.bin`, `monster3.bin`, etc.) from *Final Fantasy X*.
 
-[![Repository](https://img.shields.io/badge/GitHub-FFX__Text__Tool-blue?logo=github)](https://github.com/odinj2010/FFX_Text_Tool)
+[![Repository](https://img.shields.io/badge/GitHub-FFX__Text__Tool-blue?logo=github)](https://github.com/NfgOdin/FFX_Text_Tool)
 
 ---
 
@@ -73,7 +73,7 @@ You can compile the tool into a standalone Windows executable using PyInstaller 
 ## Contributing & Repository
 
 For updates, issues, and contributions, visit the repository:
-[https://github.com/odinj2010/FFX_Text_Tool](https://github.com/odinj2010/FFX_Text_Tool)
+[https://github.com/NfgOdin/FFX_Text_Tool](https://github.com/NfgOdin/FFX_Text_Tool)
 
 Developed by **NfgOdin** (Copyright © 2026).
 All rights reserved.
